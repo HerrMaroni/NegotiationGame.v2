@@ -1,0 +1,43 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="NegotiationGameTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="0">
+        <MudText Typo="Typo.h5" Class="mudblazor-battleship-appbar-text">Negotiation Game</MudText>
+        <MudSpacer />
+        <LoginDisplay />
+    </MudAppBar>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    MudTheme NegotiationGameTheme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Background = "#f3f2f1",
+        },
+
+        LayoutProperties = new LayoutProperties()
+        {
+            AppbarHeight = "48px"
+        },
+        Typography = new Typography()
+        {
+            Overline = new Overline()
+            {
+                FontFamily = new[] { "Roboto","Helvetica","Arial","sans-serif" },
+                FontSize = ".75rem",
+                FontWeight = 400,
+                LineHeight = 1.2,
+                LetterSpacing = ".08333em"
+            }
+        }
+    };
+}
+

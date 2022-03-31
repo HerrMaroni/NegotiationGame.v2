@@ -1,0 +1,71 @@
+﻿@using NegotiationGame.v2.Client.Service
+@using NegotiationGame.v2.Shared
+@page "/game/{gameId}"
+
+<MudText Typo="Typo.h5">Gameboard</MudText>
+
+@if (!_loaded)
+{
+    <text><h3>Just a moment...</h3></text>
+}
+// else if ()
+// {
+//     
+// }
+// else if (Room?.Users != null)
+// {
+//
+// }
+
+@code {
+
+    [Inject] GameClient GameClient { get; set; } = default!;
+    [Inject] NavigationManager NavigationManager { get; set; } = default!;
+    [Parameter] public string GameId { set => _gameId = Guid.TryParse(value, out var result) ? result : default; }
+    Guid _gameId;
+
+    int MaxPoints => _state.Users.Max(p => p.Points);
+    GameState? _state;
+    TimeSpan? _turnEndsIn;
+    string _userId;
+    bool _loaded = false;
+
+    Room? Room => GameClient?.Rooms?.FirstOrDefault(r => r.Id == _gameId);
+
+    protected override async Task OnInitializedAsync()
+    {
+        _userId = await GameClient.InvokeAsync(h => h.GetUserIdAsync());
+        GameClient.StateHasChanged += StateHasChanged;
+        GameClient.GameStateChanged += (newState, turnEndsIn) =>
+        {
+            if (newState.GameId == _gameId)
+            {
+                _state = newState;
+                _turnEndsIn = turnEndsIn;
+                StateHasChanged();
+            }
+        };
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await GameClient.InvokeAsync(h => h.UpdateRoomsAsync());
+        if (Room == null)
+            NavigationManager.NavigateTo("/");
+        else
+        {
+            await GameClient.InvokeAsync(h => h.UpdateGameStateAsync(_gameId));
+            _loaded = true;
+        }
+    }
+
+    async Task StartAsync()
+    {
+        await GameClient.InvokeAsync(h => h.StartGameAsync(_gameId));
+    }
+
+    async Task MakeMoveAsync(int x, int y)
+    {
+        await GameClient.InvokeAsync(h => h.MakeMoveAsync(_gameId));
+    }
+}
