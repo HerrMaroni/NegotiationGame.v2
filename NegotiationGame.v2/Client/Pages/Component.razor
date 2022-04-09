@@ -1,0 +1,117 @@
+﻿@page "/component"
+@using NegotiationGame.v2.Client.Components
+@using NegotiationGame.v2.Client.GameLogic.Enums
+
+
+<MudContainer Fixed=true>
+    <MudGrid Spacing=1>
+        <MudItem xs="12" sm="12" md="12">
+            <MudPaper Class=" mud-width-full pa-1 mud-theme-info ">
+                <MudStack Row=true Justify="Justify.SpaceBetween">
+                    <MudText Typo="Typo.h6">CurrentState</MudText>
+                    <MudText Typo="Typo.h6">00:00</MudText>
+                    <MudFab Color="Color.Primary" Icon="@Icons.Filled.Help" Size="Size.Small" IconSize="Size.Large" aria-label="add" />
+                </MudStack>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="9">
+            <MudPaper Class=" mud-width-full py-8 px-4">
+                <MudStack>
+                    <MudStack Justify="Justify.SpaceBetween" Row="true">
+
+                        <CCoin2 Class="text-4xl" Shape="CoinShape.Circle" Text="5"></CCoin2>
+
+                        
+                            <CCoin2 Class="text-4xl" Shape="CoinShape.Diamond" Text="5"></CCoin2>
+                        
+
+                        <CCoin2 Class="text-4xl" Shape="CoinShape.Square" Text="5"></CCoin2>
+                        <MudPaper Width="200px">
+                            <MudStack>
+                                <MudText Typo="Typo.h6" Align="Align.Center" Style="@($"color:{Colors.Shades.White};background:{Colors.LightBlue.Default};")"> <b>Opponendddddddddddddddt</b> </MudText>
+                                <MudImage Src="main-page/coinBlue.svg" Alt="Mony the dog" Class="rounded-lg" />
+                            </MudStack>
+                        </MudPaper>
+                    </MudStack>
+                    <MudStack Justify="Justify.SpaceBetween" Row="true">
+
+                      
+                        <MudPaper Width="200px">
+                            <MudStack>
+                                <MudText Typo="Typo.h6" Align="Align.Center" Style="@($"color:{Colors.Shades.White};background:{Colors.LightBlue.Default};")"> <b>Opponendddddddddddddddt</b> </MudText>
+                                <MudImage Src="main-page/coinBlue.svg" Alt="Mony the dog" Class="rounded-lg" />
+                            </MudStack>
+                        </MudPaper>
+                    </MudStack>
+                    <MudStack Justify="Justify.SpaceBetween" Row="true">
+
+                        <MudPaper Width="200px">
+                            <MudStack>
+                                <MudText Typo="Typo.h6" Align="Align.Center" Style="@($"color:{Colors.Shades.White};background:{Colors.LightBlue.Default};")"> <b>Opponendddddddddddddddt</b> </MudText>
+                                <MudImage Src="main-page/coinBlue.svg" Alt="Mony the dog" Class="rounded-lg" />
+                            </MudStack>
+                        </MudPaper>
+
+                        <CCoin2 Class="text-4xl" Shape="CoinShape.Circle" Text="5"></CCoin2>
+
+                     
+                            <CCoin2 Class="text-4xl" Shape="CoinShape.Diamond" Text="5"></CCoin2>
+                      
+
+                        <CCoin2 Class="text-4xl" Shape="CoinShape.Circle" Text="5"></CCoin2>
+                        
+                    </MudStack>
+                </MudStack>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="3">
+           
+            <MudStack Spacing=0>
+                <MudPaper Class="mud-width-full py-4 px-4">
+                    <MudStack>
+                        <MudStack Justify="Justify.SpaceBetween" Row="true">
+                            <MudChip Color="Color.Info" Size="Size.Large"><b>Game: / </b></MudChip>
+                            <MudChip Color="Color.Info" Size="Size.Large"><b>Game: / </b></MudChip>
+                        </MudStack>
+                        <MudText Typo="Typo.h6">Own coin Value:</MudText>
+                        <MudContainer>
+                        <MudPaper Class=" object-scale-down    mud-width-full py-8 px-4">
+                        <MudStack Justify="Justify.SpaceEvenly" Row="true">
+
+                            <CCoin2 Class="text-4xl" Shape="CoinShape.Circle" Text="5"></CCoin2>
+
+                           
+                                <CCoin2 Class="text-4xl" Shape="CoinShape.Diamond" Text="5"></CCoin2>
+                            
+
+                            <CCoin2 Class="text-4xl" Shape="CoinShape.Circle" Text="5"></CCoin2>
+
+                        </MudStack>
+                        </MudPaper>
+                        </MudContainer>
+                        <MudText Typo="Typo.h6">Own coin Value:</MudText>
+                        <MudStack Justify="Justify.SpaceEvenly" Row="true">
+                            <MudChip Color="Color.Info" Size="Size.Large"><b>Game: / </b></MudChip>
+                            <MudChip Color="Color.Info" Size="Size.Large"><b>Game: / </b></MudChip>
+                        </MudStack>
+                    </MudStack>
+                </MudPaper>
+                <MudText Typo="Typo.h4" Align="Align.Center" Style="@($"color:{Colors.Shades.White}; background:{Colors.LightBlue.Default}; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;")"> <b>Event Log</b> </MudText>
+                <MudPaper Height="200px">
+                    
+                    <MudDivider />
+                </MudPaper>
+                 <MudText Typo="Typo.h4" Align="Align.Center" Style="@($"color:{Colors.Shades.White}; background:{Colors.LightBlue.Default}; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;")"> <b>Chat Log</b> </MudText>
+                <MudPaper Height="200px">
+                   
+                    <MudDivider />
+                </MudPaper>
+            </MudStack>
+
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+
+}

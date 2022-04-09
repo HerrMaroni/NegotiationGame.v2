@@ -1,0 +1,23 @@
+﻿<svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" 
+	 viewBox="0 0 170 170">
+<defs>
+	<style>
+		.cls-1{fill:#009cd9;}
+		.cls-2{fill:none;stroke:#888c86;stroke-width:16px;}
+		.cls-3{fill:#fff;stroke:#000;stroke-miterlimit:10;stroke-width:0.5px;}
+	</style>
+</defs>
+	<g id="widget313">
+		<path class="cls-1" d="M90,20c39.2,0,70,30.8,70,70s-30.8,70-70,70S20,129.2,20,90,50.8,20,90,20Z"
+			  transform="translate(-5 -5)"/>
+		<path class="cls-2" d="M90,13c43.12,0,77,33.88,77,77s-33.88,77-77,77S13,133.12,13,90,46.88,13,90,13Z"
+			  transform="translate(-5 -5)"/>
+	</g>
+	<g id="widget313-2" data-name="widget313">
+		<path class="cls-1" d="M90,20c39.2,0,70,30.8,70,70s-30.8,70-70,70S20,129.2,20,90,50.8,20,90,20Z"
+			  transform="translate(-5 -5)"/>
+		<path class="cls-2" d="M90,13c43.12,0,77,33.88,77,77s-33.88,77-77,77S13,133.12,13,90,46.88,13,90,13Z"
+			  transform="translate(-5 -5)"/>
+	</g>
+<rect class="cls-3" x="36.2" y="36.2" width="97.7" height="97.7"/>
+</svg>

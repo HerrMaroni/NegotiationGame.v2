@@ -1,0 +1,543 @@
+﻿.wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "GameBoardWrapper";
+    width: 100%;
+    height: 100%;
+}
+
+.GameBoardWrapper {
+    display: grid;
+    grid-template-columns: 1.6fr 0.4fr;
+    grid-template-rows: 1fr;
+    gap: 0 0;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "PlayingField GameInformation";
+    grid-area: GameBoardWrapper;
+    min-height: 0 !important;
+}
+
+.GameInformation {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr minmax(250px, 1fr) !important;
+    overflow: hidden !important;
+    gap: 0 0;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "GameStats"
+        "EventLog"
+        "ChatLog";
+    grid-area: GameInformation;
+}
+
+.GameStats {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    padding: 20px;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 0.2fr 0.2fr 1.4fr 0.2fr 1.4fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "Game Game Round"
+        "OwnCoinValue OwnCoinValue OwnCoinValue"
+        "OwnCoins OwnCoins OwnCoins"
+        "OpponentCoinValue OpponentCoinValue OpponentCoinValue"
+        "OpponentCoins OpponentCoins OpponentCoins";
+    grid-area: GameStats;
+}
+
+.Game {
+    grid-area: Game;
+}
+
+.Round {
+    grid-area: Round;
+}
+
+.OwnCoinValue {
+    grid-area: OwnCoinValue;
+}
+
+.OpponentCoinValue {
+    grid-area: OpponentCoinValue;
+}
+
+.OwnCoins {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    gap: 0 0;
+    grid-template-areas:
+        "Player1Coin1Value Player1Coin2Value Player1Coin3Value";
+    grid-area: OwnCoins;
+    place-items: center;
+}
+
+.Player1Coin1Value {
+    grid-area: Player1Coin1Value;
+    width: 100%;
+    height: 100%;
+}
+
+.Player1Coin2Value {
+    grid-area: Player1Coin2Value;
+    width: 100%;
+    height: 100%;
+}
+
+.Player1Coin3Value {
+    grid-area: Player1Coin3Value;
+    width: 100%;
+    height: 100%;
+}
+
+.OpponentCoins {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    gap: 0 0;
+    grid-template-areas:
+        "Player2Coin1Value Player2Coin2Value Player2Coin3Value";
+    grid-area: OpponentCoins;
+    place-items: center;
+}
+
+.Player2Coin1Value {
+    grid-area: Player2Coin1Value;
+    width: 100%;
+    height: 100%;
+}
+
+.Player2Coin2Value {
+    grid-area: Player2Coin2Value;
+    width: 100%;
+    height: 100%;
+}
+
+.Player2Coin3Value {
+    grid-area: Player2Coin3Value;
+    width: 100%;
+    height: 100%;
+}
+
+.EventLog {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    grid-area: EventLog;
+    display: flex;
+    max-height: 100%;
+    flex-direction: column;
+}
+
+.ChatLog {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    grid-area: ChatLog;
+    display: flex;
+    max-height: 100%;
+    flex-direction: column;
+}
+
+.ChatLogScrollable {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+}
+
+.PlayingField {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: grid;
+    grid-template-columns: repeat(2, 0.5fr) 1fr repeat(2, 0.5fr);
+    grid-template-rows: 0.2fr 1.4fr 1.1fr 1.4fr;
+    gap: 0 0;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "CurrentInformation CurrentInformation CurrentInformation CurrentInformation CurrentInformation"
+        "Player2Coins Player2Coins Player2Coins Player2Chat Player2"
+        "ChatOptions Coins Coins Coins Time"
+        "Player1 Player1Chat Player1Coins Player1Coins Player1Coins";
+    grid-area: PlayingField;
+}
+
+.CurrentInformation {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    background-color: #31a0f9;
+    display: grid;
+    grid-template-columns: 2.4fr 0.4fr 0.2fr;
+    grid-template-rows: 1fr;
+    gap: 0 0;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "CurrentAction CurrentTime Help";
+    grid-area: CurrentInformation;
+}
+
+.CurrentAction {
+    grid-area: CurrentAction;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 2%;
+    color: white;
+}
+
+.CurrentTime {
+    color: white;
+    grid-area: CurrentTime;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Help {
+    grid-area: Help;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.Player1 {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+    grid-area: Player1;
+    display: flex;
+    flex-direction: column;
+    margin: 5%;
+    height: 80%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.Player1Chat {
+    grid-area: Player1Chat;
+    /*display: flex;
+    justify-content: flex-start;
+    align-items: flex-end; */
+}
+
+.Player1Coins {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    gap: 0 0;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "Player1Coin1 Player1Coin2 Player1Coin3";
+    grid-area: Player1Coins;
+    place-items: center;
+}
+
+.Player1Coin1 {
+    grid-area: Player1Coin1;
+    width: 100%;
+    height: 100%;
+    padding: 25px;
+}
+
+.Player1Coin2 {
+    grid-area: Player1Coin2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1% 1%;
+    width: 100%;
+    height: 100%;
+    padding: 25px;
+}
+
+.Player1Coin3 {
+    grid-area: Player1Coin3;
+    width: 100%;
+    height: 100%;
+    padding: 25px;
+}
+
+.Player2 {
+    grid-area: Player2;
+    display: flex;
+    flex-direction: column;
+    margin: 5%;
+    height: 80%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-radius: 10px;
+}
+
+.Player2Chat {
+    grid-area: Player2Chat;
+}
+
+.Player2Coins {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    gap: 0 0;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "Player2Coin1 Player2Coin2 Player2Coin3";
+    grid-area: Player2Coins;
+    place-items: center;
+}
+
+.Player2Coin1 {
+    grid-area: Player2Coin1;
+    width: 100%;
+    height: 100%;
+    padding: 25px;
+}
+
+.Player2Coin2 {
+    grid-area: Player2Coin2;
+    width: 100%;
+    height: 100%;
+    padding: 25px;
+}
+
+.Player2Coin3 {
+    grid-area: Player2Coin3;
+    width: 100%;
+    height: 100%;
+    padding: 25px;
+}
+
+.Time {
+    grid-area: Time;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Coins {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    gap: 0 0;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "Coin1 Coin2 Coin3";
+    grid-area: Coins;
+    place-items: center;
+}
+
+.Coin1 {
+    grid-area: Coin1;
+    width: 100%;
+    height: 100%;
+}
+
+.Coin2 {
+    grid-area: Coin2;
+    width: 100%;
+    height: 100%;
+}
+
+.Coin3 {
+    grid-area: Coin3;
+    width: 100%;
+    height: 100%;
+}
+
+.ChatOptions {
+    grid-area: ChatOptions;
+}
+
+/* For presentation only, no need to copy the code below */
+
+.wrapper * {
+    /*border: 1px solid red; */
+    position: relative;
+}
+
+    .wrapper *:after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: grid;
+        align-items: center;
+        justify-content: center;
+    }
+
+#coinRedNumber {
+}
+
+#coinYellowNumber {
+}
+
+#coinBlueNumber {
+}
+
+.containerMeins {
+    position: relative;
+    text-align: center;
+}
+
+/* Centered text */
+.centeredMeins {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#coinRedStats {
+    float: left;
+    width: 33.3%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#coinYellowStats {
+    float: left;
+    width: 33.3%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#coinBlueStats {
+    float: left;
+    width: 33.3%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.coinOpponentStats {
+    float: left;
+    width: 33.3%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalxyz {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popUp {
+    position: absolute;
+    top: 50%;
+    left: 15%;
+    width: 50%;
+    height: 50%;
+}
+
+.received, .sent {
+    position: relative;
+    font-family: arial;
+    font-size: 1.1em;
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+    .received:after, .sent:after {
+        content: '';
+        border: 20px solid transparent;
+        position: absolute;
+        margin-top: -30px;
+    }
+
+.sent {
+    background: #03a9f4;
+    color: #fff;
+    margin-left: 30%;
+    text-align: right;
+}
+
+.received {
+    background: #4CAF50;
+    color: #fff;
+    margin-left: 10px;
+    margin-right: 10%;
+}
+
+    /*.sent:after {
+    border-left-color: #03a9f4;
+    border-right: 0;
+    right: -20px;
+}
+*/
+    .received:after {
+        border-right-color: #4CAF50;
+        border-left: 0;
+        left: -20px;
+    }
+
+/* div within bubble for name */
+.user {
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #000;
+}
+
+.msg {
+    /*display: inline;*/
+}
+
+@media screen and (max-width: 1365px) {
+    div.wrapper {
+        display: none;
+    }
+}
+
+@media screen and (max-height: 870px) {
+    div.wrapper {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1364px) and (min-height: 849px) {
+    div.screenSize {
+        display: none;
+    }
+}
+
+
+.playerChipTop {
+    background-color: #31a0f9;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.playerChipBottom {
+    background-color: #31a0f9;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+
+
+.screenSize {
+}

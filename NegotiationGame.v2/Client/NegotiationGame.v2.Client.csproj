@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -28,6 +28,16 @@
     <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css.map" />
     <_ContentIncludedByDefault Remove="wwwroot\_content\MudBlazor\MudBlazor.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Components\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\main-page\coinBlue.svg" />
+    <None Include="wwwroot\main-page\coinRed.svg" />
+    <None Include="wwwroot\main-page\coinYellow.svg" />
   </ItemGroup>
 
 </Project>

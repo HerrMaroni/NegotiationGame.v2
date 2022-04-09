@@ -1,0 +1,53 @@
+@page "/CCoin2"
+@inherits MudText
+@using MudBlazor.Utilities
+@using NegotiationGame.v2.Client.GameLogic.Enums
+
+@*
+<div class="coin" style="background-image:url('main-page/@CoinShapeColor'); visibility: @CoinVisibility;">
+    <MudText Typo="Typo.h1" Class="@Classname">@Text</MudText>
+</div>
+
+<mudavatar style="height:100%; width:100%; " image="main-page/coinred.svg"></mudavatar>
+*@
+
+<MudContainer Class="d-flex justify-center align-center ">
+<MudImage Src="main-page/coinred.svg" Alt="Mony the dog"  Class="rounded-lg"/>
+</MudContainer>
+<MudContainer Class="d-flex justify-center align-center "></MudContainer>
+@*
+<MudPaper Width="100px" Style="background-image:url('main-page/coinRed.svg');">
+     <MudText Typo="Typo.h1" Class="@Classname">@Text</MudText>
+</MudPaper>
+
+<MudContainer Class="@Classname">
+        <MudPaper Height="100%"  Width="100%" Square="true"  Style="background-image:url('main-page/coinRed.svg');">
+              <MudText Typo="Typo.h1" >@Text</MudText>
+            </MudPaper>
+    </MudContainer>
+*@
+@code {
+
+    [Parameter]
+    public string Text { get; set; } = "?";
+
+    [Parameter]
+    public CoinShape Shape { get; set; } = CoinShape.Square;
+
+    [Parameter]
+    public bool Visible { get; set; } = true;
+
+    protected new string Classname =>
+        new CssBuilder("font-black")
+            .AddClass(Class)
+            .Build();
+
+    private string CoinVisibility => Visible ? "visible" : "hidden";
+
+    private string CoinShapeColor => Shape switch {
+        CoinShape.Diamond => "coinRed.svg",
+        CoinShape.Circle => "coinYellow.svg",
+        CoinShape.Square => "coinBlue.svg",
+        _ => "coinRed.svg"
+        };
+}
