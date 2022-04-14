@@ -1,5 +1,6 @@
 ﻿@page "/component"
 @using NegotiationGame.v2.Client.Components
+@using NegotiationGame.v2.Client.GameLogic
 @using NegotiationGame.v2.Client.GameLogic.Enums
 
 
@@ -16,16 +17,25 @@
         </MudItem>
         <MudItem xs="9">
             <MudPaper Class=" mud-width-full py-8 px-4">
+                <!-- Player Two Div-->
                 <MudStack>
+                    <MudStack Justify="Justify.SpaceAround" Row="true">
+
+                        <!--Player 2 Coin Grid-->
+                        <CCoin2 Class="text-4xl" Shape="CoinShape.Circle" Text=""></CCoin2>
+                        <CCoin2 Class="text-4xl" Shape="CoinShape.Diamond" Text=""></CCoin2>
+                        <CCoin2 Class="text-4xl" Shape="CoinShape.Square" Text=""></CCoin2>
+
+                        <MudStack Spacing="0">
+                            <MudPaper Class="rounded-t-lg mud-theme-info text-white ">
+                                <MudText Class="pa-2" Typo="Typo.h6" Align="Align.Center"> <b>fralor007@yahoo.de</b> </MudText>
+                            </MudPaper>
+                            <MudImage Fluid="true" Src="main-page/player2.svg" Alt="Mony the dog" Class="rounded-lg" />
+                        </MudStack>
+
+                    </MudStack>
+                     <!--Player Two-->
                     <MudStack Justify="Justify.SpaceBetween" Row="true">
-
-                        <CCoin2 Class="text-4xl" Shape="CoinShape.Circle" Text="5"></CCoin2>
-
-                        
-                            <CCoin2 Class="text-4xl" Shape="CoinShape.Diamond" Text="5"></CCoin2>
-                        
-
-                        <CCoin2 Class="text-4xl" Shape="CoinShape.Square" Text="5"></CCoin2>
                         <MudPaper Width="200px">
                             <MudStack>
                                 <MudText Typo="Typo.h6" Align="Align.Center" Style="@($"color:{Colors.Shades.White};background:{Colors.LightBlue.Default};")"> <b>Opponendddddddddddddddt</b> </MudText>
@@ -33,78 +43,125 @@
                             </MudStack>
                         </MudPaper>
                     </MudStack>
-                    <MudStack Justify="Justify.SpaceBetween" Row="true">
 
-                      
-                        <MudPaper Width="200px">
-                            <MudStack>
-                                <MudText Typo="Typo.h6" Align="Align.Center" Style="@($"color:{Colors.Shades.White};background:{Colors.LightBlue.Default};")"> <b>Opponendddddddddddddddt</b> </MudText>
-                                <MudImage Src="main-page/coinBlue.svg" Alt="Mony the dog" Class="rounded-lg" />
-                            </MudStack>
-                        </MudPaper>
-                    </MudStack>
-                    <MudStack Justify="Justify.SpaceBetween" Row="true">
+                    <!--Player One Div-->
+                    <MudStack Justify="Justify.SpaceAround" Row="true">
+                        <MudStack Spacing="0">
+                            <MudPaper Class="rounded-t-lg mud-theme-info text-white ">
+                                <MudText Class="pa-2" Typo="Typo.h6" Align="Align.Center"> <b>fralor007@yahoo.de</b> </MudText>
+                            </MudPaper>
+                            <MudImage Fluid="true" Src="main-page/player1.svg" Alt="Mony the dog" Class="rounded-lg" />
+                            <MudPaper Class="rounded-b-lg mud-theme-info text-white ">
+                                <MudText Class="pa-2" Typo="Typo.h6" Align="Align.Center"> <b>Balance: 120/120</b> </MudText>
+                            </MudPaper>
+                        </MudStack>
 
-                        <MudPaper Width="200px">
-                            <MudStack>
-                                <MudText Typo="Typo.h6" Align="Align.Center" Style="@($"color:{Colors.Shades.White};background:{Colors.LightBlue.Default};")"> <b>Opponendddddddddddddddt</b> </MudText>
-                                <MudImage Src="main-page/coinBlue.svg" Alt="Mony the dog" Class="rounded-lg" />
-                            </MudStack>
-                        </MudPaper>
+                        <!--Player 1 Chat Grid-->
+                        <MudStack>
+                            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Chat" Color="Color.Primary" OnClick="@ToggleChat">Chat</MudButton>
+                            <MudContainer Style="width:200px;">
+                                <MudPopover Open="@_chat">
+                                    <MudButtonGroup Color="Color.Info" Variant="Variant.Filled" VerticalAlign="true">
 
-                        <CCoin2 Class="text-4xl" Shape="CoinShape.Circle" Text="5"></CCoin2>
+                                        <MudButton Style="margin-bottom: 5px;" @onclick="@(() => SendMessage("Bad Offer!"))"> Bad Offer!</MudButton>
+                                        <MudButton Style="margin-bottom: 5px;">Unfair!</MudButton>
+                                        <MudButton Style="margin-bottom: 5px;">Not good enough!</MudButton>
+                                        <MudButton Style="margin-bottom: 5px;">Great offer</MudButton>
+                                        <MudButton Style="margin-bottom: 5px;">Close!</MudButton>
+                                        <MudButton>What do you think about this offer?</MudButton>
 
-                     
-                            <CCoin2 Class="text-4xl" Shape="CoinShape.Diamond" Text="5"></CCoin2>
-                      
+                                    </MudButtonGroup>
+                                </MudPopover>
+                            </MudContainer>
+                        </MudStack>
 
-                        <CCoin2 Class="text-4xl" Shape="CoinShape.Circle" Text="5"></CCoin2>
-                        
+                        <!--Player 1 Coin Grid-->
+                        <CCoin2 Class="text-4xl" Shape="CoinShape.Circle" Text=""></CCoin2>
+                        <CCoin2 Class="text-4xl" Shape="CoinShape.Diamond" Text=""></CCoin2>
+                        <CCoin2 Class="text-4xl" Shape="CoinShape.Circle" Text=""></CCoin2>
+
                     </MudStack>
                 </MudStack>
             </MudPaper>
         </MudItem>
+
+        <!--GameStats Grid-->
         <MudItem xs="3">
-           
+
             <MudStack Spacing=0>
                 <MudPaper Class="mud-width-full py-4 px-4">
                     <MudStack>
                         <MudStack Justify="Justify.SpaceBetween" Row="true">
                             <MudChip Color="Color.Info" Size="Size.Large"><b>Game: / </b></MudChip>
-                            <MudChip Color="Color.Info" Size="Size.Large"><b>Game: / </b></MudChip>
+                            <MudChip Color="Color.Info" Size="Size.Large"><b>Round: / </b></MudChip>
                         </MudStack>
-                        <MudText Typo="Typo.h6">Own coin Value:</MudText>
-                        <MudContainer>
-                        <MudPaper Class=" object-scale-down    mud-width-full py-8 px-4">
+
+                        <MudText Typo="Typo.h6">Your Coin Vaue:</MudText>
+
                         <MudStack Justify="Justify.SpaceEvenly" Row="true">
+                            <MudStack Justify="Justify.SpaceEvenly">
+                                <MudImage Fluid=true Width="100" Src="main-page/coinred.svg" Alt="Mony the dog" Class="rounded-lg" />
 
-                            <CCoin2 Class="text-4xl" Shape="CoinShape.Circle" Text="5"></CCoin2>
 
-                           
-                                <CCoin2 Class="text-4xl" Shape="CoinShape.Diamond" Text="5"></CCoin2>
-                            
-
-                            <CCoin2 Class="text-4xl" Shape="CoinShape.Circle" Text="5"></CCoin2>
+                            </MudStack>
+                            <MudStack>
+                                <MudImage Fluid=true Width="100" Src="main-page/coinblue.svg" Alt="Mony the dog" Class="rounded-lg" />
+                            </MudStack>
+                            <MudStack>
+                                <MudImage Fluid=true Width="100" Src="main-page/coinyellow.svg" Alt="Mony the dog" Class="rounded-lg" />
+                            </MudStack>
 
                         </MudStack>
-                        </MudPaper>
-                        </MudContainer>
-                        <MudText Typo="Typo.h6">Own coin Value:</MudText>
-                        <MudStack Justify="Justify.SpaceEvenly" Row="true">
-                            <MudChip Color="Color.Info" Size="Size.Large"><b>Game: / </b></MudChip>
-                            <MudChip Color="Color.Info" Size="Size.Large"><b>Game: / </b></MudChip>
+
+                        <MudStack Justify="Justify.SpaceAround" Row="true">
+                            <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">5</MudAvatar>
+                            <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">5</MudAvatar>
+                            <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">5</MudAvatar>
+                        </MudStack>
+
+                        <MudText Typo="Typo.h6">Opponend Coin Vaue:</MudText>
+
+                        <MudStack Justify="Justify.SpaceAround" Row="true">
+                            <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">?</MudAvatar>
+                            <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">?</MudAvatar>
+                            <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">?</MudAvatar>
                         </MudStack>
                     </MudStack>
                 </MudPaper>
-                <MudText Typo="Typo.h4" Align="Align.Center" Style="@($"color:{Colors.Shades.White}; background:{Colors.LightBlue.Default}; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;")"> <b>Event Log</b> </MudText>
-                <MudPaper Height="200px">
-                    
-                    <MudDivider />
+
+                 <!--EventLog Grid-->
+                <MudPaper Class=" mud-theme-info text-white ">
+                    <MudText Class="pa-1" Typo="Typo.h4" Align="Align.Center"> <b>Event Log</b> </MudText>
                 </MudPaper>
-                 <MudText Typo="Typo.h4" Align="Align.Center" Style="@($"color:{Colors.Shades.White}; background:{Colors.LightBlue.Default}; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;")"> <b>Chat Log</b> </MudText>
-                <MudPaper Height="200px">
-                   
-                    <MudDivider />
+        
+                    <MudPaper Height="200px" Class=" overflow-scroll pa-2   ">
+
+                    </MudPaper>
+           
+
+
+                <!--ChatLog Grid-->
+                <MudPaper Height="250px">
+                    <MudPaper Class=" mud-theme-info text-white ">
+                        <MudText Class="pa-1" Typo="Typo.h4" Align="Align.Center"> <b>Chat Log</b> </MudText>
+                    </MudPaper>
+                    <MudPaper Height="200px" Class=" overflow-scroll pa-2   ">
+
+                        @foreach (var item in _messages)
+                        {
+                            <div class="d-flex flex-column">
+                                <MudChip Class="pt-6 pb-6 pl-8 pr-8 ml-auto align-start" Color="Color.Primary" Size="Size.Large">
+                                    <MudText Align="Align.Right">
+                                        <span style="font-weight: bold">@item.Username:</span>
+                                        <br />
+                                        @item.Message
+                                    </MudText>
+                                </MudChip>
+                            </div>
+                        }
+
+
+                    </MudPaper>
                 </MudPaper>
             </MudStack>
 
@@ -113,5 +170,22 @@
 </MudContainer>
 
 @code {
+
+    private bool _chat;
+    private void ToggleChat()
+    {
+        _chat = !_chat;
+    }
+
+    private List<ChatMessage> _messages = new();
+
+
+    void SendMessage(string message)
+    {
+        ChatMessage newChatMessage = new(message, DateTime.Now, "Frank");
+        _messages.Insert(0, newChatMessage);
+
+    }
+
 
 }
