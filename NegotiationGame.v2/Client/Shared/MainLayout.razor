@@ -1,22 +1,22 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider Theme="NegotiationGameTheme" />
+<MudThemeProvider Theme="_negotiationGameTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<MudLayout>
-    <MudAppBar Elevation="0">
-        <MudText Typo="Typo.h5" Class="mudblazor-battleship-appbar-text">Negotiation Game</MudText>
+<MudLayout Class="mud-height-full">
+    <MudAppBar Dense="true" Elevation="0">
+        <MudText Typo="Typo.h5">Negotiation Game</MudText>
         <MudSpacer />
         <LoginDisplay />
     </MudAppBar>
-    <MudMainContent>
+    <MudMainContent Class="mud-height-full">
         @Body
     </MudMainContent>
 </MudLayout>
 
 @code {
-    MudTheme NegotiationGameTheme = new MudTheme()
+    readonly MudTheme _negotiationGameTheme = new MudTheme()
     {
         Palette = new Palette()
         {

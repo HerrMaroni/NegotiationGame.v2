@@ -1,0 +1,69 @@
+﻿<div style="max-width:500px;">
+    @if (_color is not "")
+    {
+        <svg viewBox="0 0 100 100" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+            <circle fill="#888c86" cx="50" cy="50" r="50"/>
+            @if (_color is "blue")
+            {
+                <circle fill="#009cd9" cx="50" cy="50" r="40"/>
+                <rect fill="#ffffff" stroke="#000" stroke-miterlimit="10" stroke-width="0.4px" transform-origin="50% 50%" transform="scale(0.565)" width="100%" height="100%"/>
+
+            }
+            @if (_color is "red")
+            {
+                <circle fill="#D01515" cx="50" cy="50" r="40"/>
+                <rect fill="#ffffff" stroke="#000" stroke-miterlimit="10" stroke-width="0.8px" transform-origin="50% 50%" transform="scale(0.56) rotate(45)" width="100%" height="100%"/>
+
+            }
+            @if (_color is "yellow")
+            {
+                <circle fill="#fde71b" cx="50" cy="50" r="40"/>
+                <circle fill="#ffffff" stroke="#000" stroke-miterlimit="10" stroke-width="0.4px" cx="50" cy="50" r="30"/>
+            }
+            <text font-size="40px" x="50%" y="54%" dominant-baseline="middle" text-anchor="middle">@_content</text>
+        </svg>
+    }
+</div>
+
+@code{
+    private string _color = "";
+
+    /// <summary>
+    /// The coin color and type.
+    /// </summary>
+    [CascadingParameter]
+    public string? CascadingColor { get; set; }
+
+    [Parameter]
+    public string Color { get; set; } = "red";
+
+    /// <summary>
+    /// The visibility of the badge.
+    /// </summary>
+    [Parameter]
+    public bool Visible { get; set; } = true;
+
+    /// <summary>
+    /// Content you want inside the badge. Supported types are string and integer.
+    /// </summary>
+    [Parameter]
+    public object? Content { get; set; }
+
+    private string? _content;
+
+    protected override void OnParametersSet()
+    {
+        _content = Content switch
+        {
+            string stringContent => stringContent,
+            int numberContent => numberContent.ToString(),
+            _ => null
+        };
+        
+        _color = CascadingColor switch
+        {
+            { } color => color,
+            _ => Color
+        };
+    }
+}

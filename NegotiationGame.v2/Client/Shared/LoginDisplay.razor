@@ -10,10 +10,10 @@
         <MudIconButton Icon="@Icons.Filled.Logout" Title="Log out" Color="Color.Inherit" OnClick="BeginSignOut"/>
     </Authorized>
     <NotAuthorized>
-        <MudIconButton Icon="@Icons.Filled.AppRegistration" Title="Register" Color="Color.Inherit" Link="authentication/register"/>
-        <MudLink Href="authentication/register" Typo="Typo.h6" Color="Color.Tertiary">Register</MudLink>
-        <MudIconButton Icon="@Icons.Filled.Login" Title="Log in" Color="Color.Inherit" Link="authentication/login"/>
-        <MudLink Href="authentication/login" Typo="Typo.h6" Color="Color.Tertiary">Log in</MudLink>
+        <MudButton StartIcon="@Icons.Filled.AppRegistration" Variant="Variant.Text" Color="Color.Inherit" Href="authentication/register">Register</MudButton>
+        <MudDivider Vertical="true" DividerType="DividerType.Middle" Style="background-color: #00000000"/>
+        <MudButton StartIcon="@Icons.Filled.Login" Variant="Variant.Text" Color="Color.Inherit" Href="authentication/login">Log in</MudButton>
+        <MudDivider Vertical="true" DividerType="DividerType.Middle" Style="background-color: #00000000"/>
     </NotAuthorized>
 </AuthorizeView>
 

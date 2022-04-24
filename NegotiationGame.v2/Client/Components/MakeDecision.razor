@@ -1,0 +1,46 @@
+﻿@page "/MakeDecision"
+
+<MudPaper Elevation="0">
+    <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="16" Class="mud-height-full">
+        <MudStack Row="true" Justify="Justify.SpaceEvenly" Spacing="16" AlignItems="AlignItems.Center">
+            <CascadingValue Value="@Coin1">
+                <MakeOfferSingleCoin DisableButton="true" MaxCoins="10" @bind-Amount="_redCoinAmount" CoinColor="red"></MakeOfferSingleCoin>
+            </CascadingValue>
+
+            <CascadingValue Value="@Coin2">
+                <MakeOfferSingleCoin DisableButton="true" MaxCoins="10" @bind-Amount="_blueCoinAmount" CoinColor="blue"></MakeOfferSingleCoin>
+            </CascadingValue>
+ 
+            <CascadingValue Value="@Coin3">
+                <MakeOfferSingleCoin DisableButton="true" MaxCoins="10" @bind-Amount="_yellowCoinAmount" CoinColor="yellow"></MakeOfferSingleCoin>
+            </CascadingValue>
+        </MudStack>
+        
+        <MudStack Justify="Justify.SpaceEvenly" AlignItems="AlignItems.Center" Class="mud-width-full">
+            <MudPaper Outlined="true" Class="mud-theme-transparent rounded border-4 mud-border-primary py-3 mud-width-full">
+                <MudText Align="Align.Center" Typo="Typo.h5">Balance: 15 | 80</MudText>
+            </MudPaper>
+            <MudStack Row="true" Class="mud-width-full" Style="height: 60px">
+                <MudButton FullWidth="true" Variant="Variant.Filled" Size="Size.Large" Color="Color.Success" Class="border-4">Accept Offer</MudButton>
+                <MudButton FullWidth="true" Variant="Variant.Filled" Size="Size.Large" Color="Color.Secondary" Class="border-4">Decline Offer</MudButton>
+            </MudStack>
+        </MudStack>
+        
+    </MudStack>
+</MudPaper>
+
+@code {
+        private const string Coin1 = "blue";
+        private const string Coin2 = "red";
+        private const string Coin3 = "yellow";
+    
+    private int _redCoinAmount = 10;
+    private int _blueCoinAmount = 10;
+    private int _yellowCoinAmount = 10;
+
+    [Parameter]
+    public int EnemyCoinsAmount { get; set; }
+
+    [Parameter]
+    public int PlayerCoinsAmount { get; set; }
+}

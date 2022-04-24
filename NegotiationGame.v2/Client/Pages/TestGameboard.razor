@@ -1,0 +1,115 @@
+﻿@page "/gameboard"
+@using NegotiationGame.v2.Client.Components
+
+<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="px-1 mud-height-full">
+    <MudGrid Spacing="1" Class="px-2 pb-1 pt-3 mud-height-full">
+        <MudItem md="12" lg="9" xl="10" Class="mud-width-full">
+            <MudStack Spacing="0" Class="mud-height-full mud-width-full">
+                
+                <MudPaper Elevation="0" MinHeight="50px" MaxHeight="50px" Square="true" Class="py-1 px-5 rounded-t mud-theme-primary">
+                    <MudStack Row="true" Justify="Justify.SpaceEvenly" AlignItems="AlignItems.Center">
+                        <MudText Typo="Typo.h6">CurrentState</MudText>
+                        <MudSpacer/>
+                        <MudText Align="Align.Center" Typo="Typo.h6">00:00</MudText>
+                        <MudFab Color="Color.Primary" Icon="@Icons.Filled.Help" Size="Size.Small" IconSize="Size.Large" aria-label="add"/>
+                    </MudStack>
+                </MudPaper>
+                
+                <MudPaper Elevation="8" Height="100%" Class="mud-width-full d-flex justify-center align-content-center">
+                    
+                    <MudPaper Elevation="8" Height="100%" Class="mud-width-full">
+                        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mud-height-full" Style="max-height: 100%;">
+                            
+                            <MudStack Justify="Justify.FlexEnd" AlignItems="AlignItems.Center" Class="pa-6 mt-auto">
+                                <PlayerCard Player="player1" Name="Christian"/>
+                            </MudStack>
+                            
+                            <MudStack Row="true" Justify="Justify.SpaceBetween" Spacing="16" Style="max-width: 700px;">
+                                @switch (value1)
+                                {
+                                    case 0:
+                                        <DefaultView/>
+                                        break;
+                                    case 1:
+                                        <MakeOfferAllCoins/>
+                                        break;
+                                    case 2:
+                                        <MakeDecision/>
+                                        break;
+                                }
+                            </MudStack>
+                            
+                            <MudStack Justify="Justify.FlexEnd" AlignItems="AlignItems.End" Class="pa-6 mb-auto">
+                                <PlayerCard Player="player2" Name="Peter"/>
+                            </MudStack>
+                            
+                        </MudStack>
+                    </MudPaper>
+                    
+                </MudPaper>
+            </MudStack>
+        </MudItem>
+        <MudItem md="12" lg="3" xl="2">
+            <MudStack Spacing="3" Class="mud-height-full ml-1">
+                    <MudPaper Elevation="8" Class="px-2 pb-4">
+                        <MudPaper Elevation="0" MinHeight="50px" MaxHeight="50px" Square="true" Class="mx-n2 rounded-t mud-theme-primary d-flex justify-center align-center">
+                            <MudText Align="Align.Center" Typo="Typo.h6">Statistics</MudText>
+                        </MudPaper>
+                        <MudStack Class="pt-3">
+                            <MudStack Justify="Justify.SpaceAround" Row="true">
+                                <MudChip Color="Color.Info" Size="Size.Large"><b>Game: / </b></MudChip>
+                                <MudChip Color="Color.Info" Size="Size.Large"><b>Round: / </b></MudChip> 
+                            </MudStack>
+
+                            <MudDivider/>
+
+                            <MudStack Justify="Justify.SpaceEvenly" Style="max-height: 100px;" Row="true">
+                                <Coin Color="@ColorValue1"></Coin>
+                                <Coin Color="@ColorValue2"></Coin>
+                                <Coin Color="@ColorValue3"></Coin>
+                            </MudStack>
+
+                            <MudText Typo="Typo.h6">Your Coin Value:</MudText>
+
+                            <MudStack Justify="Justify.SpaceAround" Row="true">
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">5</MudAvatar>
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">5</MudAvatar>
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">5</MudAvatar>
+                            </MudStack>
+
+                            <MudText Typo="Typo.h6">Opponend Coin Vaue:</MudText>
+
+                            <MudStack Justify="Justify.SpaceAround" Row="true">
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">?</MudAvatar>
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">?</MudAvatar>
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">?</MudAvatar>
+                            </MudStack>
+                        </MudStack>
+                    </MudPaper>
+
+                    <MudStack Spacing="0" Class="mud-height-full">
+                        <MudPaper Elevation="0" MinHeight="50px" MaxHeight="50px" Square="true" Class="rounded-t mud-theme-primary d-flex justify-center align-center">
+                            <MudText Align="Align.Center" Typo="Typo.h6">Chat</MudText>
+                        </MudPaper>
+                        <MudPaper Elevation="8" Height="100%">
+                            <MudSlider @bind-Value="value1" Step="1" Variant="Variant.Filled" TickMarks="true" Min="0" Max="2" Class="px-2">Volume</MudSlider>
+                        </MudPaper>
+                    </MudStack>
+                </MudStack>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private bool _chat;
+    private void ToggleChat()
+    {
+        _chat = !_chat;
+    }
+
+        private const string ColorValue1 = "red";
+        private const string ColorValue2 = "blue";
+        private const string ColorValue3 = "yellow";
+    
+    public int value1 = 0;
+}

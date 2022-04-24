@@ -1,0 +1,65 @@
+﻿<MudStack Spacing="8" Justify="Justify.Center" AlignItems="AlignItems.Center">
+    <MudPaper Outlined="true" Class="mud-theme-info rounded py-3" Style="width: 150px;">
+        <MudText Typo="Typo.h4" Align="Align.Center">@(MaxCoins-Amount)</MudText>
+    </MudPaper>
+    @if (!DisableButton)
+    {
+        <MudFab Color="Color.Primary"
+                Icon="@Icons.Material.Filled.KeyboardArrowUp"
+                IconSize="Size.Large"
+                Size="Size.Large"
+                OnClick="SubAmount"
+                Disabled="@(MinCoins == Amount)">
+        </MudFab>
+    }
+    <Coin Content="@MaxCoins"/>
+    @if (!DisableButton)
+    {
+        <MudFab Color="Color.Primary"
+                Icon="@Icons.Material.Filled.KeyboardArrowDown"
+                IconSize="Size.Large"
+                Size="Size.Large"
+                OnClick="AddAmount"
+                Disabled="@(MaxCoins == Amount)">
+        </MudFab>
+    }
+    <MudPaper Outlined="true" Class="mud-theme-info rounded py-3" Style="width: 150px;">
+        <MudText Typo="Typo.h4" Align="Align.Center">@Amount</MudText>
+    </MudPaper>
+</MudStack>
+
+@code {
+    private int BoundValue
+    {
+        get => Amount;
+        set => AmountChanged.InvokeAsync(value);
+    }
+    
+    [Parameter]
+    public string CoinColor { get; set; } = "red";
+
+    [Parameter]
+    public int MinCoins { get; set; } = 0;
+
+    [Parameter]
+    public int MaxCoins { get; set; } = 10;
+
+    [Parameter]
+    public bool DisableButton { get; set; } = false;
+    
+    [Parameter]
+    public EventCallback<int> AmountChanged { get; set; }
+    
+    [Parameter]
+    public int Amount { get; set; }
+    
+    private async Task AddAmount()
+    {
+        await AmountChanged.InvokeAsync(Amount+1);
+    }
+    
+    private async Task SubAmount()
+    {
+        await AmountChanged.InvokeAsync(Amount-1);
+    }
+}

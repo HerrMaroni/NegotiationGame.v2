@@ -1,3 +1,4 @@
+using FindRazorSourceFile.WebAssembly;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -8,6 +9,11 @@ using NegotiationGame.v2.Client.Service;
 using NegotiationGame.v2.Shared;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+// #if DEBUG
+// builder.UseFindRazorSourceFile();
+// #endif
+
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
