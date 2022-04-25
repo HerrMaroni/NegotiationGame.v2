@@ -3,22 +3,22 @@
 <MudPaper Elevation="0">
     <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="16" Class="mud-height-full">
         <MudStack Row="true" Justify="Justify.SpaceEvenly" Spacing="16" AlignItems="AlignItems.Center">
-            <CascadingValue Value="@Coin1">
-                <MakeOfferSingleCoin DisableButton="true" MaxCoins="10" @bind-Amount="_redCoinAmount" CoinColor="red"></MakeOfferSingleCoin>
+            <CascadingValue Value="@GameData.Red.Color">
+                <CoinLogic DisableButton="true" MaxCoins="@GameData.MaxCoinAmount" @bind-Amount="@GameData.Red.Amount"/>
             </CascadingValue>
 
-            <CascadingValue Value="@Coin2">
-                <MakeOfferSingleCoin DisableButton="true" MaxCoins="10" @bind-Amount="_blueCoinAmount" CoinColor="blue"></MakeOfferSingleCoin>
+            <CascadingValue Value="@GameData.Blue.Color">
+                <CoinLogic DisableButton="true" MaxCoins="@GameData.MaxCoinAmount" @bind-Amount="@GameData.Blue.Amount"/>
             </CascadingValue>
  
-            <CascadingValue Value="@Coin3">
-                <MakeOfferSingleCoin DisableButton="true" MaxCoins="10" @bind-Amount="_yellowCoinAmount" CoinColor="yellow"></MakeOfferSingleCoin>
+            <CascadingValue Value="@GameData.Yellow.Color">
+                <CoinLogic DisableButton="true" MaxCoins="@GameData.MaxCoinAmount" @bind-Amount="@GameData.Yellow.Amount"/>
             </CascadingValue>
         </MudStack>
         
         <MudStack Justify="Justify.SpaceEvenly" AlignItems="AlignItems.Center" Class="mud-width-full">
             <MudPaper Outlined="true" Class="mud-theme-transparent rounded border-4 mud-border-primary py-3 mud-width-full">
-                <MudText Align="Align.Center" Typo="Typo.h5">Balance: 15 | 80</MudText>
+                <MudText Align="Align.Center" Typo="Typo.h5">Balance: @GameData.CurrentBalance | @GameData.MaxBalance</MudText>
             </MudPaper>
         </MudStack>
         
@@ -26,13 +26,7 @@
 </MudPaper>
 
 @code {
-        private const string Coin1 = "blue";
-        private const string Coin2 = "red";
-        private const string Coin3 = "yellow";
-    
-    private int _redCoinAmount = 10;
-    private int _blueCoinAmount = 10;
-    private int _yellowCoinAmount = 10;
+    [Inject] GameData GameData { get; set; } = default!;
 
     [Parameter]
     public int EnemyCoinsAmount { get; set; }

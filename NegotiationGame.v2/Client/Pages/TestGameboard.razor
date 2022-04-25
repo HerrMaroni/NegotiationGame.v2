@@ -10,7 +10,7 @@
                     <MudStack Row="true" Justify="Justify.SpaceEvenly" AlignItems="AlignItems.Center">
                         <MudText Typo="Typo.h6">CurrentState</MudText>
                         <MudSpacer/>
-                        <MudText Align="Align.Center" Typo="Typo.h6">00:00</MudText>
+                        <MudText Align="Align.Center" Typo="Typo.h6">@GameData.Time</MudText>
                         <MudFab Color="Color.Primary" Icon="@Icons.Filled.Help" Size="Size.Small" IconSize="Size.Large" aria-label="add"/>
                     </MudStack>
                 </MudPaper>
@@ -21,17 +21,17 @@
                         <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mud-height-full" Style="max-height: 100%;">
                             
                             <MudStack Justify="Justify.FlexEnd" AlignItems="AlignItems.Center" Class="pa-6 mt-auto">
-                                <PlayerCard Player="player1" Name="Christian"/>
+                                <PlayerCard Player="player1" Name="@GameData.PlayerName"/>
                             </MudStack>
                             
                             <MudStack Row="true" Justify="Justify.SpaceBetween" Spacing="16" Style="max-width: 700px;">
-                                @switch (value1)
+                                @switch (_value1)
                                 {
                                     case 0:
                                         <DefaultView/>
                                         break;
                                     case 1:
-                                        <MakeOfferAllCoins/>
+                                        <MakeOffer/>
                                         break;
                                     case 2:
                                         <MakeDecision/>
@@ -40,13 +40,14 @@
                             </MudStack>
                             
                             <MudStack Justify="Justify.FlexEnd" AlignItems="AlignItems.End" Class="pa-6 mb-auto">
-                                <PlayerCard Player="player2" Name="Peter"/>
+                                <PlayerCard Player="player2" Name="@GameData.OpponentName"/>
                             </MudStack>
                             
                         </MudStack>
                     </MudPaper>
                     
                 </MudPaper>
+                
             </MudStack>
         </MudItem>
         <MudItem md="12" lg="3" xl="2">
@@ -57,24 +58,24 @@
                         </MudPaper>
                         <MudStack Class="pt-3">
                             <MudStack Justify="Justify.SpaceAround" Row="true">
-                                <MudChip Color="Color.Info" Size="Size.Large"><b>Game: / </b></MudChip>
-                                <MudChip Color="Color.Info" Size="Size.Large"><b>Round: / </b></MudChip> 
+                                <MudChip Color="Color.Info" Size="Size.Large"><b>Game: @GameData.CurrentGame</b></MudChip>
+                                <MudChip Color="Color.Info" Size="Size.Large"><b>Round: @GameData.CurrentRound</b></MudChip> 
                             </MudStack>
 
                             <MudDivider/>
 
                             <MudStack Justify="Justify.SpaceEvenly" Style="max-height: 100px;" Row="true">
-                                <Coin Color="@ColorValue1"></Coin>
-                                <Coin Color="@ColorValue2"></Coin>
-                                <Coin Color="@ColorValue3"></Coin>
+                                <Coin Color="@GameData.Red.Color"></Coin>
+                                <Coin Color="@GameData.Blue.Color"></Coin>
+                                <Coin Color="@GameData.Yellow.Color"></Coin>
                             </MudStack>
 
                             <MudText Typo="Typo.h6">Your Coin Value:</MudText>
 
                             <MudStack Justify="Justify.SpaceAround" Row="true">
-                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">5</MudAvatar>
-                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">5</MudAvatar>
-                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">5</MudAvatar>
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">@GameData.Red.Value</MudAvatar>
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">@GameData.Blue.Value</MudAvatar>
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">@GameData.Yellow.Value</MudAvatar>
                             </MudStack>
 
                             <MudText Typo="Typo.h6">Opponend Coin Vaue:</MudText>
@@ -92,7 +93,7 @@
                             <MudText Align="Align.Center" Typo="Typo.h6">Chat</MudText>
                         </MudPaper>
                         <MudPaper Elevation="8" Height="100%">
-                            <MudSlider @bind-Value="value1" Step="1" Variant="Variant.Filled" TickMarks="true" Min="0" Max="2" Class="px-2">Volume</MudSlider>
+                            <MudSlider @bind-Value="_value1" Step="1" Variant="Variant.Filled" TickMarks="true" Min="0" Max="2" Class="px-2">Volume</MudSlider>
                         </MudPaper>
                     </MudStack>
                 </MudStack>
@@ -101,6 +102,8 @@
 </MudContainer>
 
 @code {
+    [Inject] GameData GameData { get; set; } = default!;
+    
     private bool _chat;
     private void ToggleChat()
     {
@@ -110,6 +113,15 @@
         private const string ColorValue1 = "red";
         private const string ColorValue2 = "blue";
         private const string ColorValue3 = "yellow";
-    
-    public int value1 = 0;
+
+    private int _value1 = 0;
+
+    protected override async void OnInitialized()
+    {
+        GameData.PlayerName = "Christian";
+        GameData.OpponentName = "Peter";
+        await GameData.CalculateMaxBalance();
+        await GameData.CalculateCurrentBalance();
+    }
+
 }

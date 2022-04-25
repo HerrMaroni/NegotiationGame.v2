@@ -29,10 +29,13 @@ builder.Services.AddMudServices();
 
 builder.Services.AddSingleton<GameClient>();
 builder.Services.AddSingleton(GameClient.HubConnectionFactory);
+builder.Services.AddSingleton<GameData>();
+
 
 var host = builder.Build();
 var hubConnection = await host.Services.GetRequiredService<Task<HubConnection>>();
-if (hubConnection != null)
-    builder.Services.AddSingleton(hubConnection);
+builder.Services.AddSingleton(hubConnection);
+
 host = builder.Build();
+
 await host.RunAsync();

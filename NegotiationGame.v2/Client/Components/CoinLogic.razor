@@ -9,7 +9,7 @@
                 IconSize="Size.Large"
                 Size="Size.Large"
                 OnClick="SubAmount"
-                Disabled="@(MinCoins == Amount)">
+                Disabled="@(Amount == 0)">
         </MudFab>
     }
     <Coin Content="@MaxCoins"/>
@@ -29,17 +29,13 @@
 </MudStack>
 
 @code {
+    [Inject] GameData GameData { get; set; } = default!;
+    
     private int BoundValue
     {
         get => Amount;
         set => AmountChanged.InvokeAsync(value);
     }
-    
-    [Parameter]
-    public string CoinColor { get; set; } = "red";
-
-    [Parameter]
-    public int MinCoins { get; set; } = 0;
 
     [Parameter]
     public int MaxCoins { get; set; } = 10;
@@ -56,10 +52,14 @@
     private async Task AddAmount()
     {
         await AmountChanged.InvokeAsync(Amount+1);
+        await GameData.CalculateMaxBalance();
+        await GameData.CalculateCurrentBalance();
     }
     
     private async Task SubAmount()
     {
         await AmountChanged.InvokeAsync(Amount-1);
+        await GameData.CalculateMaxBalance();
+        await GameData.CalculateCurrentBalance();
     }
 }
