@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using NegotiationGame.v2.Shared;
+using NegotiationGame.v2.Shared.Interfaces;
 
 namespace NegotiationGame.v2.Client.Service;
 

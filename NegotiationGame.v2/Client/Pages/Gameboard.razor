@@ -1,5 +1,4 @@
-﻿@using NegotiationGame.v2.Client.Service
-@using NegotiationGame.v2.Shared
+﻿@using NegotiationGame.v2.Shared
 @page "/game/{gameId}"
 
 <MudText Typo="Typo.h5">Gameboard</MudText>
@@ -12,13 +11,12 @@
 // {
 //     
 // }
-// else if (Room?.Users != null)
-// {
-//
-// }
+else if (Room?.Users != null)
+{
+    
+}
 
 @code {
-
     [Inject] GameClient GameClient { get; set; } = default!;
     [Inject] NavigationManager NavigationManager { get; set; } = default!;
     [Parameter] public string GameId { set => _gameId = Guid.TryParse(value, out var result) ? result : default; }

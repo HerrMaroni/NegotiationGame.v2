@@ -6,8 +6,8 @@
 <MudContainer MaxWidth="MaxWidth.False" Class="my-16 pt-16">
     <MudGrid>
         <MudItem xs="12" sm="12" md="7">
-            <MudPaper Elevation="3" Class="pb-4 rounded-lg">
-                <div class="px-5 py-3 mb-2  battleship-lobby-card-header">
+            <MudPaper Elevation="3" Class="pa-4 rounded-lg">
+                <div class="px-5 py-3 mb-2">
                     <MudText Typo="Typo.h5">Create a Room</MudText>
                 </div>
                 <div class="mx-4 px-2">
@@ -34,66 +34,73 @@
                     </MudForm>
                 </div>
             </MudPaper>
-            <MudPaper Elevation="3" Class="pb-4 mt-4 rounded-lg">
-                <div class="px-5 py-3 mb-2  battleship-lobby-card-header">
+            <MudPaper Elevation="3" Class="pa-4 mt-4 rounded-lg">
+                <div class="px-5 py-3 mb-2">
                     <MudText Typo="Typo.h5">Available rooms</MudText>
                 </div>
-                <div class="list-group-item bg-light">
-                    @if (GameClient.Rooms.Any())
-                    {
-                        foreach (var room in GameClient.Rooms)
+                @if (GameClient.Rooms.Any())
+                {
+                    <MudGrid Spacing="1">
+                        @foreach (var room in GameClient.Rooms)
                         {
-                            <div class="list-group-item" @key="room.Id">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <p class="mb-1 @(room.Started ? "text-dark" : null)">
-                                        @room.Name
-                                        @if (room.Users.Any(u => u.Id == _userId))
-                                        {
-                                            <a href="/game/@room.Id"><i class="oi oi-arrow-right"></i></a>
-                                        }
-                                    </p>
-                                    <small class="font-weight-bold">@room.Host.Name</small>
-                                    <small class="text-muted">@room.Date.ToString("HH:mm:ss")</small>
-                                </div>
-                                <div>
-                                    Players:
-                                    @foreach (var (user, index) in room.Users.Select((u, i) => (u, i)))
-                                    {
-                                        <i>@user.Name</i>
-                                        @if (index != room.Users.Count - 1)
-                                        {<text>, </text>}
-                                    }
-                                </div>
-                                @if (_selectedRoom == room)
-                                {
-                                    <form @onsubmit="() => EnterRoomAsync(room)">
-                                        <input class="form-control"
-                                               @bind="EnterRoomPin"
-                                               @bind:event="oninput"
-                                               disabled="@(_enteringRoom || !GameClient.IsConnected)"
-                                               placeholder="Enter the 4 digit PIN for the room to enter" />
-                                        <button class="btn btn-secondary" type="submit" disabled="@( _enteringRoom || !GameClient.IsConnected)">Enter room</button>
-                                        @if (_enterRoomError != null)
-                                        {
-                                            <p class="text-danger small">@_enterRoomError <b style="cursor: pointer" @onclick="() => _enterRoomError = null">X</b></p>
-                                        }
-                                    </form>
-                                }
-                                else if (!room.Started && room.Users.All(u => u.Id != _userId))
-                                {
-                                    <a class="btn btn-success" @onclick="() => { _selectedRoom = room; _enterRoomError = null; }">Enter room</a>
-                                }
-                            </div>
+                            <MudItem  xs="12" sm="12" md="12" lg="6" xl="4" xxl="3" @key="room.Id">
+                                <MudPaper Class="mud-theme-info pa-2 mud-width-full">
+                                    <MudStack>
+                                        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                                            <MudText Typo="Typo.h6">@room.Name</MudText>
+                                            <MudText Typo="Typo.body2">@room.Host.Name</MudText>
+                                            <MudText Typo="Typo.body2">@room.Date.ToString("HH:mm:ss")</MudText>
+                                        </MudStack>
+                                        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
+                                            <MudText Typo="Typo.subtitle1">Players:</MudText>
+                                            @foreach (var (user, index) in room.Users.Select((u, i) => (u, i)))
+                                            {
+                                                <MudText Typo="Typo.body2"><i>@user.Name</i></MudText>
+                                                @if (index == room.Users.Count - 1)
+                                                {
+                                                    continue;
+                                                }
+                                                @:<MudText Typo="Typo.body2">,</MudText>
+                                            }
+                                            <MudSpacer/>
+                                            @if (_selectedRoom == room)
+                                            {
+                                                <form @onsubmit="() => EnterRoomAsync(room)">
+                                                    <input class="form-control"
+                                                           @bind="EnterRoomPin"
+                                                           @bind:event="oninput"
+                                                           disabled="@(_enteringRoom || !GameClient.IsConnected)"
+                                                           placeholder="Enter the 4 digit PIN for the room to enter"/>
+                                                    <button class="btn btn-secondary" type="submit" disabled="@(_enteringRoom || !GameClient.IsConnected)">Enter room</button>
+                                                    @if (_enterRoomError != null)
+                                                    {
+                                                        <p class="text-danger small">@_enterRoomError <b style="cursor: pointer" @onclick="() => _enterRoomError = null">X</b></p>
+                                                    }
+                                                </form>
+                                            }
+                                            else if (!room.Started && room.Users.All(u => u.Id != _userId))
+                                            {
+                                                <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Warning" Class="mr-auto">Enter</MudButton>
+                                                @* <a class="btn btn-success" @onclick="() => { _selectedRoom = room; _enterRoomError = null; }">Enter room</a> *@
+                                            }
+                                            @if (room.Users.Any(u => u.Id == _userId))
+                                            {
+                                                <a href="/game/@room.Id">GO BACK</a>
+                                            }
+                                        </MudStack>
+                                    </MudStack>
+                                </MudPaper>
+                            </MudItem>
                         }
-                    }
-                    else
-                    {
-                        <div class="mx-4 px-2">
-                            <MudText Typo="Typo.h6">No rooms yet :'(</MudText>
-                            <MudText Typo="Typo.body1">Create one!</MudText>
-                        </div>
-                    }
-                </div>
+                    </MudGrid>
+                }
+                else
+                {
+                    <div class="mx-4 px-2">
+                        <MudText Typo="Typo.h6">No rooms yet :'(</MudText>
+                        <MudText Typo="Typo.body1">Create one!</MudText>
+                    </div>
+                }
             </MudPaper>
         </MudItem>
         <MudItem xs="12" sm="12" md="5">

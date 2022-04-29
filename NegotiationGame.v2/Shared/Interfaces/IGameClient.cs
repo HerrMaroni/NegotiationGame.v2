@@ -1,4 +1,4 @@
-﻿namespace NegotiationGame.v2.Shared;
+﻿namespace NegotiationGame.v2.Shared.Interfaces;
 
 public interface IGameClient
 {

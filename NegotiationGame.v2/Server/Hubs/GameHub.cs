@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using NegotiationGame.v2.Server.Data;
 using NegotiationGame.v2.Shared;
+using NegotiationGame.v2.Shared.Interfaces;
 
 namespace NegotiationGame.v2.Server.Hubs;
 
@@ -99,7 +100,8 @@ public class GameHub : Hub<IGameClient>, IGameHub
 
     public Task UpdateGameStateAsync(Guid roomId)
     {
-        throw new NotImplementedException();
+        Console.WriteLine("UpdateGameStateAsync");
+        return Task.CompletedTask;
     }
 
     public Task StartGameAsync(Guid roomId)

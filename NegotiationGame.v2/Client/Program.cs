@@ -33,8 +33,10 @@ builder.Services.AddSingleton<GameData>();
 
 
 var host = builder.Build();
+
 var hubConnection = await host.Services.GetRequiredService<Task<HubConnection>>();
-builder.Services.AddSingleton(hubConnection);
+if (hubConnection != null)
+    builder.Services.AddSingleton(hubConnection);
 
 host = builder.Build();
 
