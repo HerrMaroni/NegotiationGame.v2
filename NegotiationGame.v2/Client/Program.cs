@@ -37,7 +37,6 @@ var host = builder.Build();
 var hubConnection = await host.Services.GetRequiredService<Task<HubConnection>>();
 if (hubConnection != null)
     builder.Services.AddSingleton(hubConnection);
-
 host = builder.Build();
 
 await host.RunAsync();

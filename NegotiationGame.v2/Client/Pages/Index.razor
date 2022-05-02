@@ -51,41 +51,53 @@
                                             <MudText Typo="Typo.body2">@room.Host.Name</MudText>
                                             <MudText Typo="Typo.body2">@room.Date.ToString("HH:mm:ss")</MudText>
                                         </MudStack>
-                                        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
+                                        <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.FlexStart">
                                             <MudText Typo="Typo.subtitle1">Players:</MudText>
-                                            @foreach (var (user, index) in room.Users.Select((u, i) => (u, i)))
-                                            {
-                                                <MudText Typo="Typo.body2"><i>@user.Name</i></MudText>
-                                                @if (index == room.Users.Count - 1)
+                                            <MudStack Spacing="0" Class="pt-1">
+                                                @foreach (var (user, index) in room.Users.Select((u, i) => (u, i)))
                                                 {
-                                                    continue;
+                                                    <MudText Typo="Typo.body2">
+                                                        <i>
+                                                        @if (index != room.Users.Count - 1)
+                                                        {
+                                                            @(user.Name + ",")
+                                                        }
+                                                        else
+                                                        {
+                                                            @user.Name
+                                                        }
+                                                        </i>
+                                                    </MudText>
                                                 }
-                                                @:<MudText Typo="Typo.body2">,</MudText>
-                                            }
+                                            </MudStack>
                                             <MudSpacer/>
-                                            @if (_selectedRoom == room)
+                                            @if (!room.Started && room.Users.All(u => u.Id != _userId) && _selectedRoom != room && room.Users.Count < 2)
                                             {
-                                                <form @onsubmit="() => EnterRoomAsync(room)">
-                                                    <input class="form-control"
-                                                           @bind="EnterRoomPin"
-                                                           @bind:event="oninput"
-                                                           disabled="@(_enteringRoom || !GameClient.IsConnected)"
-                                                           placeholder="Enter the 4 digit PIN for the room to enter"/>
-                                                    <button class="btn btn-secondary" type="submit" disabled="@(_enteringRoom || !GameClient.IsConnected)">Enter room</button>
-                                                    @if (_enterRoomError != null)
-                                                    {
-                                                        <p class="text-danger small">@_enterRoomError <b style="cursor: pointer" @onclick="() => _enterRoomError = null">X</b></p>
-                                                    }
-                                                </form>
-                                            }
-                                            else if (!room.Started && room.Users.All(u => u.Id != _userId))
-                                            {
-                                                <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Warning" Class="mr-auto">Enter</MudButton>
-                                                @* <a class="btn btn-success" @onclick="() => { _selectedRoom = room; _enterRoomError = null; }">Enter room</a> *@
+                                                <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary" Class="mr-auto" OnClick="@(() => {_selectedRoom = room; _enterRoomError = null;})">
+                                                    Join
+                                                </MudButton>
                                             }
                                             @if (room.Users.Any(u => u.Id == _userId))
                                             {
-                                                <a href="/game/@room.Id">GO BACK</a>
+                                                <MudButton Href="@("/game/" + room.Id)" Size="Size.Small" Variant="Variant.Filled" Color="Color.Warning" Class="mr-auto">
+                                                    GO BACK
+                                                </MudButton>
+                                            }
+                                        </MudStack>
+                                        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
+                                            @if (_selectedRoom == room)
+                                            {
+                                                <MudTextField @bind-Value="EnterRoomPin"
+                                                              T="string"
+                                                              Label="Enter the 4 digit room PIN"
+                                                              HelperText="Enter the room pin"
+                                                              Disabled="@(_enteringRoom || !GameClient.IsConnected)"
+                                                              Required="true"
+                                                              Validation="@(new Func<string, IEnumerable<string>>(RoomPinValidator.IsValidPin))"
+                                                              RequiredError="PIN is required!"/>
+                                                <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Primary" Disabled="@(_enteringRoom || !GameClient.IsConnected)" Class="ml-auto" OnClick="@(async () => await EnterRoomAsync(room))">
+                                                    Enter room
+                                                </MudButton>
                                             }
                                         </MudStack>
                                     </MudStack>

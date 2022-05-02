@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using NegotiationGame.v2.Shared;
+using NegotiationGame.v2.Shared.GameDomain;
 using NegotiationGame.v2.Shared.Interfaces;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace NegotiationGame.v2.Client.Service;
 
@@ -36,12 +39,26 @@ public class GameClient : IGameClient
         if (!(await scope.ServiceProvider.GetRequiredService<IAccessTokenProvider>().RequestAccessToken())
             .TryGetToken(out var token))
             return null!;
+        var contractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new CamelCaseNamingStrategy
+            {
+                ProcessDictionaryKeys = false
+            }
+        };
         var hubConnection = new HubConnectionBuilder().WithUrl(
             scope.ServiceProvider.GetRequiredService<NavigationManager>().ToAbsoluteUri("/gamehub"),
             HttpTransportType.WebSockets, option =>
             {
                 option.SkipNegotiation = true;
                 option.Url = new Uri(option.Url + $"?access_token={token.Value}");
+            }).AddNewtonsoftJsonProtocol(opts =>
+            {
+                opts.PayloadSerializerSettings = new JsonSerializerSettings
+                    {
+                        ContractResolver = contractResolver,
+                        Formatting = Formatting.Indented
+                    };
             }).WithAutomaticReconnect(Enumerable.Range(0, 10).Select(i => TimeSpan.FromSeconds(i)).ToArray()).Build();
         await hubConnection.StartAsync();
         return hubConnection;
@@ -76,6 +93,7 @@ public class GameClient : IGameClient
     public event Action<GameState, TimeSpan?>? GameStateChanged;
     public Task UpdateGameStateAsync(GameState gameState, double? turnEndsInMilliseconds)
     {
+        Console.WriteLine("Game state updated");
         GameStateChanged?.Invoke(gameState, turnEndsInMilliseconds == null ? null : TimeSpan.FromMilliseconds(turnEndsInMilliseconds.Value));
         return Task.CompletedTask;
     }

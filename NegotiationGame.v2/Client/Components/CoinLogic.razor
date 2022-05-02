@@ -52,14 +52,10 @@
     private async Task AddAmount()
     {
         await AmountChanged.InvokeAsync(Amount+1);
-        await GameData.CalculateMaxBalance();
-        await GameData.CalculateCurrentBalance();
     }
     
     private async Task SubAmount()
     {
         await AmountChanged.InvokeAsync(Amount-1);
-        await GameData.CalculateMaxBalance();
-        await GameData.CalculateCurrentBalance();
     }
 }

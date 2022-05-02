@@ -1,9 +1,11 @@
 ﻿using System.Collections.Concurrent;
+using System.Net;
 using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using NegotiationGame.v2.Server.Data;
 using NegotiationGame.v2.Shared;
+using NegotiationGame.v2.Shared.GameDomain;
 using NegotiationGame.v2.Shared.Interfaces;
 
 namespace NegotiationGame.v2.Server.Hubs;
@@ -24,16 +26,21 @@ public class GameHub : Hub<IGameClient>, IGameHub
         var email = (await ApplicationDbContext.Users.FindAsync(userId))?.Email;
         return $"{email?[0..email.IndexOf('@')]}-{userId?[0..3]}";
     }
-    
+
     public Task SendMessageToLobbyAsync(string message)
     {
         throw new NotImplementedException();
     }
 
+    #region RoomManagement
+
     private static ConcurrentDictionary<Guid, (string Pin, Room Room)> Rooms { get; } = new();
 
-    public Task<string> GetUserIdAsync() => Task.FromResult(Context.UserIdentifier)!;
-    
+    public Task<string> GetUserIdAsync()
+    {
+        return Task.FromResult(Context.UserIdentifier)!;
+    }
+
     public async Task UpdateRoomsAsync()
     {
         foreach (var (id, _) in Rooms.Where(r => r.Value.Room.Date < DateTime.Today.AddHours(-1)).ToList())
@@ -41,19 +48,21 @@ public class GameHub : Hub<IGameClient>, IGameHub
         var rooms = Rooms.Select(r => r.Value.Room).OrderBy(r => r.Date).ToList();
         await Clients.All.UpdateRoomsListAsync(rooms);
     }
-    
-    private async Task<User> GetCurrentUserAsync() =>
-        new User
+
+    private async Task<User> GetCurrentUserAsync()
+    {
+        return new()
         {
             Id = Context.UserIdentifier ?? throw new InvalidOperationException(),
             Name = await GetUserNameAsync()
         };
-    
+    }
+
     public async Task<Room> CreateRoomAsync(string pin, string name)
     {
         if (!RoomPinValidator.IsValidPin(pin).IsNullOrEmpty())
             throw new HubException("Invalid PIN.");
-        
+
         var user = await GetCurrentUserAsync();
         var room = new Room
         {
@@ -68,7 +77,7 @@ public class GameHub : Hub<IGameClient>, IGameHub
         await UpdateRoomsAsync();
         return room;
     }
-    
+
     public async Task DeleteRoomAsync(Guid roomId)
     {
         if (Rooms.TryGetValue(roomId, out var item) && item.Room.Host?.Id == Context.UserIdentifier)
@@ -83,14 +92,14 @@ public class GameHub : Hub<IGameClient>, IGameHub
             PinIsCorrect: item.Pin == pin,
             UserIsInRoom: item.Room.Users.Any(u => u.Id == Context.UserIdentifier),
             GameInProgress: item.Room.Started
-            );
+        );
         var result = check switch
         {
             (true, true, false, false) => EnterRoomResult.Ok,
             (true, true, false, true) => EnterRoomResult.GameAlreadyInProgress,
             (true, true, true, _) => EnterRoomResult.UserAlreadyInRoom,
             (true, false, _, _) => EnterRoomResult.InvalidPin,
-            (false, _, _, _) => EnterRoomResult.InvalidRoomId,
+            (false, _, _, _) => EnterRoomResult.InvalidRoomId
         };
         if (result != EnterRoomResult.Ok) return result;
         item.Room.Users.Add(await GetCurrentUserAsync());
@@ -98,19 +107,61 @@ public class GameHub : Hub<IGameClient>, IGameHub
         return result;
     }
 
-    public Task UpdateGameStateAsync(Guid roomId)
+    #endregion
+
+    #region GameManagement
+
+    private static ConcurrentDictionary<Guid, GameState> Games { get; } = new();
+
+    public async Task UpdateGameStateAsync(Guid roomId)
     {
-        Console.WriteLine("UpdateGameStateAsync");
-        return Task.CompletedTask;
+        if (Rooms.TryGetValue(roomId, out var item) && Games.TryGetValue(roomId, out var game))
+            await Clients.Users(item.Room.Users.Select(u => u.Id).ToList()).UpdateGameStateAsync(game, game.TurnEnds.HasValue ? (game.TurnEnds.Value - DateTime.Now).TotalMilliseconds : null);
     }
 
-    public Task StartGameAsync(Guid roomId)
+    private static void NextPlayer(GameState state)
     {
-        throw new NotImplementedException();
+        state.CurrentUserId = state.Users[(state.Users.FindIndex(u => u.Id == state.CurrentUserId) + 1) % state.Users.Count].Id;
+        state.TurnEnds = DateTime.Now.AddSeconds(5);
+    }
+    
+    public async Task StartGameAsync(Guid roomId)
+    {
+        if (Rooms.TryGetValue(roomId, out var item) &&
+            !item.Room.Started &&
+            (item.Room.Users.FirstOrDefault(u => u.Id == Context.UserIdentifier)) != null)
+        {
+            item.Room.Started = true;
+            var random = new Random();
+            var state = new GameState(roomId, DateTime.Now.AddSeconds(600),
+                item.Room.Users.OrderBy(_ => random.Next()).First().Id,
+                item.Room.Users.Select(u => new User { Id = u.Id, Name = u.Name, Balance = 0 }).ToList());
+            state.CurrentCorrelation = state.Correlations.Dequeue();
+            var user = state.Users.First(u => u.Id == Context.UserIdentifier);
+            
+            
+            Games.TryAdd(roomId, state);
+            _ = Task.Run(async () =>
+            {
+                while (state.TurnEnds != null)
+                {
+                    await Task.Delay(500);
+                    if (state.TurnEnds < DateTime.Now)
+                    {
+                        user.Balance -= 10;
+                        NextPlayer(state);
+                    }
+                    await UpdateGameStateAsync(roomId);
+                }
+            });
+        }
+        await UpdateGameStateAsync(roomId);
     }
 
     public Task MakeMoveAsync(Guid roomId)
     {
         throw new NotImplementedException();
     }
+
+    #endregion
 }

@@ -6,6 +6,8 @@ using NegotiationGame.v2.Server.Data;
 using NegotiationGame.v2.Server.Hubs;
 using NegotiationGame.v2.Server.Models;
 using NegotiationGame.v2.Shared;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +39,22 @@ builder.Services.PostConfigureAll<JwtBearerOptions>(options =>
     };
 });
 
-builder.Services.AddSignalR();
+var contractResolver = new DefaultContractResolver
+{
+    NamingStrategy = new CamelCaseNamingStrategy
+    {
+        ProcessDictionaryKeys = false
+    }
+};
+
+builder.Services.AddSignalR().AddNewtonsoftJsonProtocol(opts =>
+{
+    opts.PayloadSerializerSettings = new JsonSerializerSettings
+    {
+        ContractResolver = contractResolver,
+        Formatting = Formatting.Indented
+    };
+});
 
 builder.Services.AddResponseCompression(opts =>
 {

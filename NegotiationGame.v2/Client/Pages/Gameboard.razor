@@ -1,4 +1,5 @@
 ﻿@using NegotiationGame.v2.Shared
+@using NegotiationGame.v2.Client.Components
 @page "/game/{gameId}"
 
 <MudText Typo="Typo.h5">Gameboard</MudText>
@@ -7,27 +8,136 @@
 {
     <text><h3>Just a moment...</h3></text>
 }
-// else if ()
-// {
-//     
-// }
+else if (_state != null)
+{
+    <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="px-1 mud-height-full">
+        <MudGrid Spacing="1" Class="px-2 pb-1 pt-3 mud-height-full">
+            <MudItem md="12" lg="9" xl="10" Class="mud-width-full">
+                <MudStack Spacing="0" Class="mud-height-full mud-width-full">
+                    
+                    <MudPaper Elevation="0" MinHeight="50px" MaxHeight="50px" Square="true" Class="py-1 px-5 rounded-t mud-theme-primary">
+                        <MudStack Row="true" Justify="Justify.SpaceEvenly" AlignItems="AlignItems.Center">
+                            <MudText Typo="Typo.h6">CurrentState</MudText>
+                            <MudSpacer/>
+                            <MudText Align="Align.Center" Typo="Typo.h6">@GameData.Time</MudText>
+                            <MudFab Color="Color.Primary" Icon="@Icons.Filled.Help" Size="Size.Small" IconSize="Size.Large" aria-label="add"/>
+                        </MudStack>
+                    </MudPaper>
+                    
+                    <MudPaper Elevation="8" Height="100%" Class="mud-width-full d-flex justify-center align-content-center">
+                        
+                        <MudPaper Elevation="8" Height="100%" Class="mud-width-full">
+                            <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="mud-height-full" Style="max-height: 100%;">
+                                
+                                <MudStack Justify="Justify.FlexEnd" AlignItems="AlignItems.Center" Class="pa-6 mt-auto">
+                                    <PlayerCard Player="player1" Name="@GameData.PlayerName"/>
+                                </MudStack>
+                                
+                                <MudStack Row="true" Justify="Justify.SpaceBetween" Spacing="16" Style="max-width: 700px;">
+                                    @switch (_value1)
+                                    {
+                                        case 0:
+                                            <DefaultView/>
+                                            break;
+                                        case 1:
+                                            <MakeOffer/>
+                                            break;
+                                        case 2:
+                                            <MakeDecision/>
+                                            break;
+                                    }
+                                </MudStack>
+                                
+                                <MudStack Justify="Justify.FlexEnd" AlignItems="AlignItems.End" Class="pa-6 mb-auto">
+                                    <PlayerCard Player="player2" Name="@GameData.OpponentName"/>
+                                </MudStack>
+                                
+                            </MudStack>
+                        </MudPaper>
+                        
+                    </MudPaper>
+                    
+                </MudStack>
+            </MudItem>
+            <MudItem md="12" lg="3" xl="2">
+                <MudStack Spacing="3" Class="mud-height-full ml-1">
+                    <MudPaper Elevation="8" Class="px-2 pb-4">
+                        <MudPaper Elevation="0" MinHeight="50px" MaxHeight="50px" Square="true" Class="mx-n2 rounded-t mud-theme-primary d-flex justify-center align-center">
+                            <MudText Align="Align.Center" Typo="Typo.h6">Statistics</MudText>
+                        </MudPaper>
+                        <MudStack Class="pt-3">
+                            <MudStack Justify="Justify.SpaceAround" Row="true">
+                                <MudChip Color="Color.Info" Size="Size.Large"><b>Game: @GameData.CurrentGame</b></MudChip>
+                                <MudChip Color="Color.Info" Size="Size.Large"><b>Round: @GameData.CurrentRound</b></MudChip> 
+                            </MudStack>
+
+                            <MudDivider/>
+
+                            <MudStack Justify="Justify.SpaceEvenly" Style="max-height: 100px;" Row="true">
+                                <Coin Color="@GameData.Red.Color"></Coin>
+                                <Coin Color="@GameData.Blue.Color"></Coin>
+                                <Coin Color="@GameData.Yellow.Color"></Coin>
+                            </MudStack>
+
+                            <MudText Typo="Typo.h6">Your Coin Value:</MudText>
+
+                            <MudStack Justify="Justify.SpaceAround" Row="true">
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">@GameData.Red.Value</MudAvatar>
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">@GameData.Blue.Value</MudAvatar>
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">@GameData.Yellow.Value</MudAvatar>
+                            </MudStack>
+
+                            <MudText Typo="Typo.h6">Opponend Coin Vaue:</MudText>
+
+                            <MudStack Justify="Justify.SpaceAround" Row="true">
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">?</MudAvatar>
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">?</MudAvatar>
+                                <MudAvatar Variant="Variant.Outlined" Size="Size.Large" Color="Color.Info">?</MudAvatar>
+                            </MudStack>
+                        </MudStack>
+                    </MudPaper>
+
+                    <MudStack Spacing="0" Class="mud-height-full">
+                        <MudPaper Elevation="0" MinHeight="50px" MaxHeight="50px" Square="true" Class="rounded-t mud-theme-primary d-flex justify-center align-center">
+                            <MudText Align="Align.Center" Typo="Typo.h6">Chat</MudText>
+                        </MudPaper>
+                        <MudPaper Elevation="8" Height="100%">
+                            <MudSlider @bind-Value="_value1" Step="1" Variant="Variant.Filled" TickMarks="true" Min="0" Max="2" Class="px-2">Volume</MudSlider>
+                        </MudPaper>
+                    </MudStack>
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+}
 else if (Room?.Users != null)
 {
-    
+    <h3>Hi guys!</h3>
+    <ul>
+        @foreach (var user in Room.Users)
+        {
+            <li>@user.Name</li>
+        }
+    </ul>
+    <h5>Can we start?</h5>
+    <button class="btn btn-outline-success" @onclick="StartAsync">Yes!</button>
 }
 
 @code {
     [Inject] GameClient GameClient { get; set; } = default!;
     [Inject] NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] GameData GameData { get; set; } = default!;
+    
     [Parameter] public string GameId { set => _gameId = Guid.TryParse(value, out var result) ? result : default; }
     Guid _gameId;
-
-    int MaxPoints => _state.Users.Max(p => p.Points);
+    int MaxPoints => _state.Users.Max(p => p.Balance);
     GameState? _state;
-    TimeSpan? _turnEndsIn;
+    TimeSpan? _turnEndsIn = null;
     string _userId;
     bool _loaded = false;
-
+    
+    private int _value1 = 0;
+    
     Room? Room => GameClient?.Rooms?.FirstOrDefault(r => r.Id == _gameId);
 
     protected override async Task OnInitializedAsync()
@@ -36,12 +146,10 @@ else if (Room?.Users != null)
         GameClient.StateHasChanged += StateHasChanged;
         GameClient.GameStateChanged += (newState, turnEndsIn) =>
         {
-            if (newState.GameId == _gameId)
-            {
-                _state = newState;
-                _turnEndsIn = turnEndsIn;
-                StateHasChanged();
-            }
+            if (newState.GameId != _gameId) return;
+            _state = newState;
+            _turnEndsIn = turnEndsIn;
+            StateHasChanged();
         };
     }
 
