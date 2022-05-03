@@ -6,4 +6,5 @@ public interface IGameClient
 {
     Task UpdateRoomsListAsync(List<Room> rooms);
     Task UpdateGameStateAsync(GameState gameState, double? turnEndsInMilliseconds);
+    Task UpdateOfferAsync(Offer offer);
 }

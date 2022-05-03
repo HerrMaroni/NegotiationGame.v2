@@ -21,8 +21,8 @@
                 <MudText Align="Align.Center" Typo="Typo.h5">Balance: @GameData.CurrentBalance | @GameData.MaxBalance</MudText>
             </MudPaper>
             <MudStack Row="true" Class="mud-width-full" Style="height: 60px">
-                <MudButton FullWidth="true" Variant="Variant.Filled" Size="Size.Large" Color="Color.Success" Class="border-4">Accept Offer</MudButton>
-                <MudButton FullWidth="true" Variant="Variant.Filled" Size="Size.Large" Color="Color.Secondary" Class="border-4">Decline Offer</MudButton>
+                <MudButton OnClick="() => GameData.MakeDecision(Event.AcceptOffer)" FullWidth="true" Variant="Variant.Filled" Size="Size.Large" Color="Color.Success" Class="border-4">Accept Offer</MudButton>
+                <MudButton OnClick="() => GameData.MakeDecision(Event.DeclineOffer)" FullWidth="true" Variant="Variant.Filled" Size="Size.Large" Color="Color.Secondary" Class="border-4">Decline Offer</MudButton>
             </MudStack>
         </MudStack>
         

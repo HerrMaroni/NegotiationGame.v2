@@ -51,7 +51,7 @@ public class GameHub : Hub<IGameClient>, IGameHub
 
     private async Task<User> GetCurrentUserAsync()
     {
-        return new()
+        return new User
         {
             Id = Context.UserIdentifier ?? throw new InvalidOperationException(),
             Name = await GetUserNameAsync()
@@ -122,7 +122,6 @@ public class GameHub : Hub<IGameClient>, IGameHub
     private static void NextPlayer(GameState state)
     {
         state.CurrentUserId = state.Users[(state.Users.FindIndex(u => u.Id == state.CurrentUserId) + 1) % state.Users.Count].Id;
-        state.TurnEnds = DateTime.Now.AddSeconds(5);
     }
     
     public async Task StartGameAsync(Guid roomId)
@@ -137,6 +136,7 @@ public class GameHub : Hub<IGameClient>, IGameHub
                 item.Room.Users.OrderBy(_ => random.Next()).First().Id,
                 item.Room.Users.Select(u => new User { Id = u.Id, Name = u.Name, Balance = 0 }).ToList());
             state.CurrentCorrelation = state.Correlations.Dequeue();
+            state.CurrentEvent = Event.MakeOffer;
             var user = state.Users.First(u => u.Id == Context.UserIdentifier);
             
             
@@ -148,7 +148,6 @@ public class GameHub : Hub<IGameClient>, IGameHub
                     await Task.Delay(500);
                     if (state.TurnEnds < DateTime.Now)
                     {
-                        user.Balance -= 10;
                         NextPlayer(state);
                     }
                     await UpdateGameStateAsync(roomId);
@@ -158,9 +157,46 @@ public class GameHub : Hub<IGameClient>, IGameHub
         await UpdateGameStateAsync(roomId);
     }
 
-    public Task MakeMoveAsync(Guid roomId)
+    public async Task MakeOfferAsync(Guid roomId, Offer offer)
     {
-        throw new NotImplementedException();
+        if (Games.TryGetValue(roomId, out var game) && game.CurrentUserId == Context.UserIdentifier)
+        {
+            game.CurrentEvent = Event.MakeDecision;
+
+            NextPlayer(game);
+            if (Rooms.TryGetValue(roomId, out var item))
+                await Clients.User(item.Room.Users.First(u => u.Id != Context.UserIdentifier).Id).UpdateOfferAsync(offer);
+            await UpdateGameStateAsync(roomId);
+        }
+    }
+    
+    public async Task MakeDecisionAsync(Guid roomId, Event decision)
+    {
+        if (Games.TryGetValue(roomId, out var game) && game.CurrentUserId == Context.UserIdentifier)
+        {
+            switch (decision)
+            {
+                case Event.AcceptOffer:
+                    game.ResetGameState();
+                    break;
+                case Event.DeclineOffer:
+                    game.CurrentEvent = Event.MakeOffer;
+                    game.CurrentTurn++;
+                    game.MaxCoinAmount--;
+                    break;
+                default:
+                    throw new ArgumentException();
+            }
+            var offer = new Offer()
+            {
+                RedCoin = game.MaxCoinAmount,
+                BlueCoin = game.MaxCoinAmount,
+                YellowCoin = game.MaxCoinAmount
+            };
+            if (Rooms.TryGetValue(roomId, out var item))
+                await Clients.Users(item.Room.Users.Select(u => u.Id).ToList()).UpdateOfferAsync(offer);
+            await UpdateGameStateAsync(roomId);
+        }
     }
 
     #endregion

@@ -10,7 +10,7 @@
                     <MudStack Row="true" Justify="Justify.SpaceEvenly" AlignItems="AlignItems.Center">
                         <MudText Typo="Typo.h6">CurrentState</MudText>
                         <MudSpacer/>
-                        <MudText Align="Align.Center" Typo="Typo.h6">@GameData.Time</MudText>
+                        <MudText Align="Align.Center" Typo="Typo.h6">@GameData.TurnEndsIn</MudText>
                         <MudFab Color="Color.Primary" Icon="@Icons.Filled.Help" Size="Size.Small" IconSize="Size.Large" aria-label="add"/>
                     </MudStack>
                 </MudPaper>
@@ -59,7 +59,7 @@
                         <MudStack Class="pt-3">
                             <MudStack Justify="Justify.SpaceAround" Row="true">
                                 <MudChip Color="Color.Info" Size="Size.Large"><b>Game: @GameData.CurrentGame</b></MudChip>
-                                <MudChip Color="Color.Info" Size="Size.Large"><b>Round: @GameData.CurrentRound</b></MudChip> 
+                                <MudChip Color="Color.Info" Size="Size.Large"><b>Round: @GameData.CurrentTurn</b></MudChip> 
                             </MudStack>
 
                             <MudDivider/>

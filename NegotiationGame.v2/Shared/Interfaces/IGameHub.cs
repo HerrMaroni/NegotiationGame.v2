@@ -1,4 +1,6 @@
-﻿namespace NegotiationGame.v2.Shared.Interfaces;
+﻿using NegotiationGame.v2.Shared.GameDomain;
+
+namespace NegotiationGame.v2.Shared.Interfaces;
 
 public interface IGameHub
 {
@@ -15,6 +17,7 @@ public interface IGameHub
     #region GameManagement
     Task UpdateGameStateAsync(Guid roomId);
     Task StartGameAsync(Guid roomId);
-    Task MakeMoveAsync(Guid roomId);
+    Task MakeOfferAsync(Guid roomId, Offer offer);
+    Task MakeDecisionAsync(Guid roomId, Event decision);
     #endregion
 }

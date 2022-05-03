@@ -97,4 +97,12 @@ public class GameClient : IGameClient
         GameStateChanged?.Invoke(gameState, turnEndsInMilliseconds == null ? null : TimeSpan.FromMilliseconds(turnEndsInMilliseconds.Value));
         return Task.CompletedTask;
     }
+    
+    public event Action<Offer>? OfferChanged;
+    public Task UpdateOfferAsync(Offer offer)
+    {
+        Console.WriteLine("Offer updated");
+        OfferChanged?.Invoke(offer);
+        return Task.CompletedTask;
+    }
 }

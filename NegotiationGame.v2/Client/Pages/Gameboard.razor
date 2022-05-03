@@ -2,8 +2,6 @@
 @using NegotiationGame.v2.Client.Components
 @page "/game/{gameId}"
 
-<MudText Typo="Typo.h5">Gameboard</MudText>
-
 @if (!_loaded)
 {
     <text><h3>Just a moment...</h3></text>
@@ -19,7 +17,10 @@ else if (_state != null)
                         <MudStack Row="true" Justify="Justify.SpaceEvenly" AlignItems="AlignItems.Center">
                             <MudText Typo="Typo.h6">CurrentState</MudText>
                             <MudSpacer/>
-                            <MudText Align="Align.Center" Typo="Typo.h6">@GameData.Time</MudText>
+                            @if (GameData.TurnEndsIn != null)
+                            {
+                                <MudText Align="Align.Center" Typo="Typo.h6">@((int)GameData.TurnEndsIn.Value.TotalSeconds)</MudText>
+                            }
                             <MudFab Color="Color.Primary" Icon="@Icons.Filled.Help" Size="Size.Small" IconSize="Size.Large" aria-label="add"/>
                         </MudStack>
                     </MudPaper>
@@ -34,17 +35,25 @@ else if (_state != null)
                                 </MudStack>
                                 
                                 <MudStack Row="true" Justify="Justify.SpaceBetween" Spacing="16" Style="max-width: 700px;">
-                                    @switch (_value1)
+                                    @switch (GameData.CurrentView)
                                     {
-                                        case 0:
+                                        case GameView.StandardView:
                                             <DefaultView/>
                                             break;
-                                        case 1:
+                                        case GameView.StandardViewWaitingMakeOffer:
+                                            <DefaultView/>
+                                            break;
+                                        case GameView.StandardViewWaitingMakeDecision:
+                                            <DefaultView/>
+                                            break;
+                                        case GameView.MakeOfferView:
                                             <MakeOffer/>
                                             break;
-                                        case 2:
+                                        case GameView.MakeDecisionView:
                                             <MakeDecision/>
                                             break;
+                                        default:
+                                            throw new ArgumentOutOfRangeException();
                                     }
                                 </MudStack>
                                 
@@ -68,7 +77,7 @@ else if (_state != null)
                         <MudStack Class="pt-3">
                             <MudStack Justify="Justify.SpaceAround" Row="true">
                                 <MudChip Color="Color.Info" Size="Size.Large"><b>Game: @GameData.CurrentGame</b></MudChip>
-                                <MudChip Color="Color.Info" Size="Size.Large"><b>Round: @GameData.CurrentRound</b></MudChip> 
+                                <MudChip Color="Color.Info" Size="Size.Large"><b>Round: @GameData.CurrentTurn</b></MudChip> 
                             </MudStack>
 
                             <MudDivider/>
@@ -102,7 +111,7 @@ else if (_state != null)
                             <MudText Align="Align.Center" Typo="Typo.h6">Chat</MudText>
                         </MudPaper>
                         <MudPaper Elevation="8" Height="100%">
-                            <MudSlider @bind-Value="_value1" Step="1" Variant="Variant.Filled" TickMarks="true" Min="0" Max="2" Class="px-2">Volume</MudSlider>
+                            
                         </MudPaper>
                     </MudStack>
                 </MudStack>
@@ -130,14 +139,10 @@ else if (Room?.Users != null)
     
     [Parameter] public string GameId { set => _gameId = Guid.TryParse(value, out var result) ? result : default; }
     Guid _gameId;
-    int MaxPoints => _state.Users.Max(p => p.Balance);
     GameState? _state;
-    TimeSpan? _turnEndsIn = null;
-    string _userId;
+    string _userId = "";
     bool _loaded = false;
-    
-    private int _value1 = 0;
-    
+
     Room? Room => GameClient?.Rooms?.FirstOrDefault(r => r.Id == _gameId);
 
     protected override async Task OnInitializedAsync()
@@ -148,9 +153,19 @@ else if (Room?.Users != null)
         {
             if (newState.GameId != _gameId) return;
             _state = newState;
-            _turnEndsIn = turnEndsIn;
+            GameData.UpdateGameData(newState, _userId, turnEndsIn);
             StateHasChanged();
         };
+        GameClient.OfferChanged += (offer) =>
+        {
+            GameData.Red.Amount = offer.RedCoin;
+            GameData.Blue.Amount = offer.BlueCoin;
+            GameData.Yellow.Amount = offer.YellowCoin;
+            StateHasChanged();
+        };
+        GameData.OnMakeOffer += async (offer) => await MakeOfferAsync(offer);
+        GameData.OnMakeDecision += async (decision) => await MakeDecisionAsync(decision);
+        
     }
 
     protected override async Task OnParametersSetAsync()
@@ -170,8 +185,13 @@ else if (Room?.Users != null)
         await GameClient.InvokeAsync(h => h.StartGameAsync(_gameId));
     }
 
-    async Task MakeMoveAsync(int x, int y)
+    async Task MakeOfferAsync(Offer offer)
     {
-        await GameClient.InvokeAsync(h => h.MakeMoveAsync(_gameId));
+        await GameClient.InvokeAsync(h => h.MakeOfferAsync(_gameId, offer));
+    }
+    
+    async Task MakeDecisionAsync(Event decision)
+    {
+        await GameClient.InvokeAsync(h => h.MakeDecisionAsync(_gameId, decision));
     }
 }

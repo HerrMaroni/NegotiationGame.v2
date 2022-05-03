@@ -20,7 +20,7 @@
             <MudPaper Outlined="true" Class="mud-theme-transparent rounded border-4 mud-border-primary py-3 mud-width-full">
                 <MudText Align="Align.Center" Typo="Typo.h5">Balance: @GameData.CurrentBalance | @GameData.MaxBalance</MudText>
             </MudPaper>
-            <MudButton FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" Class="border-4">Submit Offer</MudButton>
+            <MudButton OnClick="() => GameData.MakeOffer(Offer)" FullWidth="true" Variant="Variant.Filled" Color="Color.Primary" Class="border-4">Submit Offer</MudButton>
         </MudStack>
         
     </MudStack>
@@ -34,4 +34,12 @@
 
     [Parameter]
     public int PlayerCoinsAmount { get; set; }
+
+    private Offer Offer => new()
+    {
+        RedCoin = GameData.MaxCoinAmount - GameData.Red.Amount,
+        BlueCoin = GameData.MaxCoinAmount - GameData.Blue.Amount,
+        YellowCoin = GameData.MaxCoinAmount - GameData.Yellow.Amount
+    };
+
 }
